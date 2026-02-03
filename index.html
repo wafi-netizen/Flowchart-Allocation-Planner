@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+  <html lang="id">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Flowchart - Zuma Allocation Planner System</title>
+      <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; line-he
+  ight: 1.6; }
+          .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+          .header { text-align: center; margin-bottom: 50px; padding: 40px; background: linear-gradient(135deg, #1a5276
+  0%, #2980b9 100%); color: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(26, 82, 118, 0.3); }
+          .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+          .section { background: white; border-radius: 16px; padding: 40px; margin-bottom: 40px; box-shadow: 0 4px 20px
+  rgba(0,0,0,0.08); }
+          .section-title { font-size: 1.8em; color: #1a5276; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 3
+  px solid #3498db; display: flex; align-items: center; gap: 15px; }
+          .section-number { background: #1a5276; color: white; width: 45px; height: 45px; border-radius: 50%; display: f
+  lex; align-items: center; justify-content: center; font-weight: bold; }
+          .flowchart { display: flex; flex-direction: column; align-items: center; padding: 30px; overflow-x: auto; }
+          .flow-row { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 1
+  0px 0; }
+          .flow-box { padding: 20px 30px; border-radius: 12px; text-align: center; font-weight: 500; min-width: 180px; m
+  ax-width: 280px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+          .start-end { background: linear-gradient(135deg, #1a5276, #2980b9); color: white; border-radius: 30px; }
+          .process { background: linear-gradient(135deg, #3498db, #5dade2); color: white; }
+          .decision-box { background: linear-gradient(135deg, #e67e22, #f39c12); color: white; border: 3px solid #d35400
+  ; }
+          .tier-t8 { background: linear-gradient(135deg, #95a5a6, #bdc3c7); color: #333; }
+          .tier-t1 { background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; }
+          .tier-t2 { background: linear-gradient(135deg, #3498db, #5dade2); color: white; }
+          .tier-t3 { background: linear-gradient(135deg, #9b59b6, #a569bd); color: white; }
+          .tier-t4 { background: linear-gradient(135deg, #e67e22, #f39c12); color: white; }
+          .tier-t5 { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+          .surplus { background: linear-gradient(135deg, #e74c3c, #c0392b); color: white; }
+          .deficit { background: linear-gradient(135deg, #27ae60, #2ecc71); color: white; }
+          .normal { background: linear-gradient(135deg, #3498db, #5dade2); color: white; }
+          .warehouse { background: linear-gradient(135deg, #34495e, #2c3e50); color: white; }
+          .store { background: linear-gradient(135deg, #16a085, #1abc9c); color: white; }
+          .arrow-down { font-size: 2.5em; color: #3498db; margin: 5px 0; text-align: center; }
+          .arrow { display: flex; align-items: center; justify-content: center; color: #7f8c8d; font-size: 2em; }
+          .branch { display: flex; gap: 40px; justify-content: center; align-items: flex-start; margin: 20px 0; flex-wra
+  p: wrap; }
+          .branch-item { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+          .branch-label { background: #ecf0f1; padding: 8px 20px; border-radius: 20px; font-weight: 600; color: #333; fo
+  nt-size: 0.9em; }
+          .yes-label { background: #27ae60; color: white; }
+          .no-label { background: #e74c3c; color: white; }
+          .sub-section { background: #f8f9fa; padding: 25px; border-radius: 12px; margin: 20px 0; border-left: 4px solid
+  #3498db; max-width: 600px; }
+          .horizontal-flow { display: flex; align-items: center; justify-content: center; gap: 15px; flex-wrap: wrap; ma
+  rgin: 20px 0; }
+          .legend { display: flex; flex-wrap: wrap; gap: 15px; padding: 20px; background: #f8f9fa; border-radius: 12px;
+  margin-top: 30px; }
+          .legend-item { display: flex; align-items: center; gap: 10px; }
+          .legend-color { width: 30px; height: 20px; border-radius: 5px; }
+          .flow-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+          .flow-table th, .flow-table td { padding: 15px; text-align: left; border-bottom: 1px solid #ddd; }
+          .flow-table th { background: #1a5276; color: white; }
+          .connector { width: 3px; height: 40px; background: #3498db; margin: 0 auto; }
+          @media (max-width: 768px) { .branch { flex-direction: column; gap: 20px; } .header h1 { font-size: 1.8em; } }
+      </style>
+  </head>
+  <body>
+      <div class="container">
+          <div class="header">
+              <h1>FLOWCHART</h1>
+              <p>Zuma Allocation Planner & Distribution Monitoring System</p>
+              <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">PT Dream Dare Discover - Zuma Indonesia</p>
+          </div>
+
+          <div class="section">
+              <h2 class="section-title">
+                  <span class="section-number">1</span>
+                  Tier Classification System
+              </h2>
+              <div class="flowchart">
+                  <div class="flow-box start-end">PRODUK BARU MASUK</div>
+                  <div class="arrow-down">&#8595;</div>
+                  <div class="flow-box tier-t8">
+                      <strong>TIER 8</strong><br>
+                      <small>Produk Baru / Launching</small><br>
+                      <small>Masa Observasi: 3 Bulan</small>
+                  </div>
+                  <div class="arrow-down">&#8595;</div>
+                  <div class="flow-box decision-box">
+                      EVALUASI SETELAH 3 BULAN<br>
+                      <small>Hitung Kontribusi Sales</small>
+                  </div>
+                  <div class="arrow-down">&#8595;</div>
+                  <div class="branch">
+                      <div class="branch-item">
+                          <div class="branch-label">Kontribusi >= 50%</div>
+                          <div class="arrow-down">&#8595;</div>
+                          <div class="flow-box tier-t1"><strong>TIER 1</strong><br><small>Fast Mover</small></div>
+                      </div>
+                      <div class="branch-item">
+                          <div class="branch-label">Kontribusi >= 30%</div>
+                          <div class="arrow-down">&#8595;</div>
+                          <div class="flow-box tier-t2"><strong>TIER 2</strong><br><small>Good Performer</small></div>
+                      </div>
+                      <div class="branch-item">
+                          <div class="branch-label">Kontribusi >= 20%</div>
+                          <div class="arrow-down">&#8595;</div>
+                          <div class="flow-box tier-t3"><strong>TIER 3</strong><br><small>Average</small></div>
+                      </div>
+                      <div class="branch-item">
+                          <div class="branch-label">Sales < 100 pair</div>
+                          <div class="arrow-down">&#8595;</div>
+                          <div class="flow-box tier-t4"><strong>TIER 4</strong><br><small>Slow Mover</small></div>
+                      </div>
+                      <div class="branch-item">
+                          <div class="branch-label">Discontinued</div>
+                          <div class="arrow-down">&#8595;</div>
+                          <div class="flow-box tier-t5"><strong>TIER 5</strong><br><small>End of Life</small></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div class="section">
+              <h2 class="section-title">
+                  <span class="section-number">2</span>
+                  Calculation Flow: Kapasitas ke Ideal Stock
+              </h2>
+              <div class="flowchart">
+                  <div class="flow-box start-end">START</div>
+                  <div class="arrow-down">&#8595;</div>
+                  <div class="flow-box process" style="background: linear-gradient(135deg, #34495e, #2c3e50);">
+                      <strong>STEP 1</strong><br>Ambil Data Kapasitas Store
+                  </div>
+                  <div class="arrow-down">&#8595;</div>
+                  <div class="flow-box process" style="background: linear-gradient(135deg, #8e44ad, #9b59b6);">
+                      <strong>STEP 2</strong><br>Hitung Traffic Profile
+                  </div>
+                  <div class="arrow-down">&#8595;</div>
+                  <div class="flow-box process" style="background: linear-gradient(135deg, #16a085, #1abc9c);">
+                      <strong>STEP 3</strong><br>Hitung Ideal Stock per Tier
+                  </div>
+                  <div class="arrow-down">&#8595;</div>
+                  <div class="flow-box process" style="background: linear-gradient(135deg, #e67e22, #f39c12);">
+                      <strong>STEP 4</strong><br>Ambil Data Actual Stock
+                  </div>
+                  <div class="arrow-down">&#8595;</div>
+                  <div class="flow-box decision-box">
+                      <strong>STEP 5</strong><br>Bandingkan Actual vs Ideal
+                  </div>
+                  <div class="arrow-down">&#8595;</div>
+                  <div class="branch">
+                      <div class="branch-item">
+                          <div class="branch-label">Selisih > 0</div>
+                          <div class="flow-box surplus"><strong>SURPLUS</strong><br><small>Perlu Redistribusi</small></d
+  iv>
+                      </div>
+                      <div class="branch-item">
+                          <div class="branch-label">Selisih = 0</div>
+                          <div class="flow-box normal"><strong>OPTIMAL</strong><br><small>No Action</small></div>
+                      </div>
+                      <div class="branch-item">
+                          <div class="branch-label">Selisih < 0</div>
+                          <div class="flow-box deficit"><strong>DEFICIT</strong><br><small>Butuh Tambahan</small></div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div style="text-align: center; padding: 30px; color: #7f8c8d;">
+              <p><strong>Document Version:</strong> 1.0 | <strong>PT Dream Dare Discover - Zuma Indonesia</strong></p>
+          </div>
+      </div>
+  </body>
+  </html>
+
+  </details>
