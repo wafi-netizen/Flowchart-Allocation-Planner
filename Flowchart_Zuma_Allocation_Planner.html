@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flowchart - Zuma Allocation Planner System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: linear-gradient(135deg, #1a5276 0%, #2980b9 100%);
+            color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(26, 82, 118, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #1a5276;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #3498db;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .section-number {
+            background: #1a5276;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Flowchart Styles */
+        .flowchart {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            overflow-x: auto;
+        }
+
+        .flow-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 10px 0;
+        }
+
+        .flow-box {
+            padding: 20px 30px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+            min-width: 180px;
+            max-width: 280px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .flow-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Box Types */
+        .start-end {
+            background: linear-gradient(135deg, #1a5276, #2980b9);
+            color: white;
+            border-radius: 30px;
+        }
+
+        .process {
+            background: linear-gradient(135deg, #3498db, #5dade2);
+            color: white;
+        }
+
+        .decision {
+            background: linear-gradient(135deg, #f39c12, #f1c40f);
+            color: #333;
+            transform: rotate(0deg);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            padding: 40px 50px;
+            min-width: 200px;
+        }
+
+        .decision-box {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+            border: 3px solid #d35400;
+        }
+
+        .data {
+            background: linear-gradient(135deg, #9b59b6, #a569bd);
+            color: white;
+            clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+            padding: 20px 40px;
+        }
+
+        .tier-t8 {
+            background: linear-gradient(135deg, #95a5a6, #bdc3c7);
+            color: #333;
+        }
+
+        .tier-t1 {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+        }
+
+        .tier-t2 {
+            background: linear-gradient(135deg, #3498db, #5dade2);
+            color: white;
+        }
+
+        .tier-t3 {
+            background: linear-gradient(135deg, #9b59b6, #a569bd);
+            color: white;
+        }
+
+        .tier-t4 {
+            background: linear-gradient(135deg, #e67e22, #f39c12);
+            color: white;
+        }
+
+        .tier-t5 {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .surplus {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .deficit {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+        }
+
+        .normal {
+            background: linear-gradient(135deg, #3498db, #5dade2);
+            color: white;
+        }
+
+        .warehouse {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            color: white;
+        }
+
+        .store {
+            background: linear-gradient(135deg, #16a085, #1abc9c);
+            color: white;
+        }
+
+        /* Arrow Styles */
+        .arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+            font-size: 2em;
+        }
+
+        .arrow-down {
+            font-size: 2.5em;
+            color: #3498db;
+            margin: 5px 0;
+        }
+
+        .arrow-label {
+            font-size: 0.5em;
+            background: #ecf0f1;
+            padding: 5px 15px;
+            border-radius: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Decision Diamond Alternative */
+        .diamond-container {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .diamond {
+            width: 200px;
+            height: 120px;
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            text-align: center;
+            padding: 30px;
+            font-size: 0.9em;
+        }
+
+        /* Branching */
+        .branch {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 20px 0;
+        }
+
+        .branch-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .branch-label {
+            background: #ecf0f1;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.9em;
+        }
+
+        .yes-label {
+            background: #27ae60;
+            color: white;
+        }
+
+        .no-label {
+            background: #e74c3c;
+            color: white;
+        }
+
+        /* Horizontal Flow */
+        .horizontal-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        /* Network Diagram */
+        .network {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .network-node {
+            text-align: center;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .network-node h4 {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .network-node ul {
+            text-align: left;
+            padding-left: 20px;
+            font-size: 0.9em;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 20px;
+            border-radius: 5px;
+        }
+
+        /* Table */
+        .flow-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .flow-table th, .flow-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .flow-table th {
+            background: #1a5276;
+            color: white;
+        }
+
+        .flow-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+            .section {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            .header {
+                background: #1a5276 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            .branch {
+                flex-direction: column;
+                gap: 20px;
+            }
+            .network {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Connector Lines */
+        .connector {
+            width: 3px;
+            height: 40px;
+            background: #3498db;
+            margin: 0 auto;
+        }
+
+        .connector-horizontal {
+            height: 3px;
+            width: 60px;
+            background: #3498db;
+        }
+
+        /* Sub-section */
+        .sub-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .sub-section h4 {
+            color: #1a5276;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>FLOWCHART</h1>
+            <p>Zuma Allocation Planner & Distribution Monitoring System</p>
+            <p style="margin-top: 10px; font-size: 0.9em; opacity: 0.8;">PT Dream Dare Discover - Zuma Indonesia</p>
+        </div>
+
+        <!-- Flowchart 1: Tier Classification System -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">1</span>
+                Tier Classification System
+            </h2>
+
+            <div class="flowchart">
+                <!-- Start -->
+                <div class="flow-box start-end">PRODUK BARU MASUK</div>
+                <div class="arrow-down">&#8595;</div>
+
+                <!-- T8 -->
+                <div class="flow-box tier-t8">
+                    <strong>TIER 8</strong><br>
+                    <small>Produk Baru / Launching</small><br>
+                    <small>Masa Observasi: 3 Bulan</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <!-- Evaluation -->
+                <div class="flow-box decision-box">
+                    EVALUASI SETELAH 3 BULAN<br>
+                    <small>Hitung Kontribusi Sales</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <!-- Branching -->
+                <div class="branch">
+                    <div class="branch-item">
+                        <div class="branch-label">Kontribusi >= 50%</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box tier-t1">
+                            <strong>TIER 1</strong><br>
+                            <small>Fast Mover</small><br>
+                            <small>High Demand</small>
+                        </div>
+                    </div>
+
+                    <div class="branch-item">
+                        <div class="branch-label">Kontribusi >= 30%</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box tier-t2">
+                            <strong>TIER 2</strong><br>
+                            <small>Good Performer</small><br>
+                            <small>Steady Demand</small>
+                        </div>
+                    </div>
+
+                    <div class="branch-item">
+                        <div class="branch-label">Kontribusi >= 20%</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box tier-t3">
+                            <strong>TIER 3</strong><br>
+                            <small>Average Performer</small>
+                        </div>
+                    </div>
+
+                    <div class="branch-item">
+                        <div class="branch-label">Sales < 100 pair</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box tier-t4">
+                            <strong>TIER 4</strong><br>
+                            <small>Slow Mover</small><br>
+                            <small>Promo Stock</small>
+                        </div>
+                    </div>
+
+                    <div class="branch-item">
+                        <div class="branch-label">Discontinued</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box tier-t5">
+                            <strong>TIER 5</strong><br>
+                            <small>End of Life</small><br>
+                            <small>Promo Stock</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="legend">
+                <strong>Keterangan:</strong>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #95a5a6, #bdc3c7);"></div>
+                    <span>T8 - New Launch</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #27ae60, #2ecc71);"></div>
+                    <span>T1 - Best Seller</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #3498db, #5dade2);"></div>
+                    <span>T2 - Good Seller</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #9b59b6, #a569bd);"></div>
+                    <span>T3 - Regular</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #e67e22, #f39c12);"></div>
+                    <span>T4 - Slow/Promo</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: linear-gradient(135deg, #e74c3c, #c0392b);"></div>
+                    <span>T5 - Discontinued</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flowchart 2: Calculation Flow -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">2</span>
+                Calculation Flow: Kapasitas ke Ideal Stock
+            </h2>
+
+            <div class="flowchart">
+                <!-- Step 1 -->
+                <div class="flow-box start-end">START</div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box process" style="background: linear-gradient(135deg, #34495e, #2c3e50);">
+                    <strong>STEP 1</strong><br>
+                    Ambil Data Kapasitas Store<br>
+                    <small>Dari Master Data</small>
+                </div>
+                <div class="sub-section" style="max-width: 400px;">
+                    <small><strong>Contoh:</strong> Store TP = 200 Box</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box process" style="background: linear-gradient(135deg, #8e44ad, #9b59b6);">
+                    <strong>STEP 2</strong><br>
+                    Hitung Traffic Profile<br>
+                    <small>Dari Data Sales 12 Bulan</small>
+                </div>
+                <div class="sub-section" style="max-width: 500px;">
+                    <h4>Formula: Tier Contribution Ratio</h4>
+                    <code>Tier_Ratio = (Sales_Tier / Total_Sales) × 100%</code>
+                    <br><br>
+                    <small><strong>Contoh Store TP (Total 10,000 pair):</strong></small>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>T1: 4,500 pair = 45%</li>
+                        <li>T2: 2,500 pair = 25%</li>
+                        <li>T3: 1,500 pair = 15%</li>
+                        <li>T8: 1,000 pair = 10%</li>
+                        <li>T4+T5: 500 pair = 5%</li>
+                    </ul>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box process" style="background: linear-gradient(135deg, #16a085, #1abc9c);">
+                    <strong>STEP 3</strong><br>
+                    Hitung Ideal Stock per Tier<br>
+                    <small>Kapasitas × Tier Ratio</small>
+                </div>
+                <div class="sub-section" style="max-width: 500px;">
+                    <h4>Formula: Ideal Stock</h4>
+                    <code>Ideal_Stock_Tier = Kapasitas × Tier_Contribution_Ratio</code>
+                    <br><br>
+                    <small><strong>Contoh Store TP (Kapasitas 200 box):</strong></small>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Ideal T1: 45% × 200 = <strong>90 box</strong></li>
+                        <li>Ideal T2: 25% × 200 = <strong>50 box</strong></li>
+                        <li>Ideal T3: 15% × 200 = <strong>30 box</strong></li>
+                        <li>Ideal T8: 10% × 200 = <strong>20 box</strong></li>
+                        <li>Ideal T4+T5: 5% × 200 = <strong>10 box</strong></li>
+                        <li><strong>Total: 200 box = Kapasitas Store</strong></li>
+                    </ul>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box process" style="background: linear-gradient(135deg, #e67e22, #f39c12);">
+                    <strong>STEP 4</strong><br>
+                    Ambil Data Actual Stock<br>
+                    <small>Export dari Accurate</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box decision-box">
+                    <strong>STEP 5</strong><br>
+                    Bandingkan Actual vs Ideal<br>
+                    <small>Selisih = Actual - Ideal</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <!-- Branching Result -->
+                <div class="branch">
+                    <div class="branch-item">
+                        <div class="branch-label">Selisih > 0</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box surplus">
+                            <strong>SURPLUS</strong><br>
+                            <small>Actual > Ideal</small><br>
+                            <small>Perlu Redistribusi</small>
+                        </div>
+                    </div>
+
+                    <div class="branch-item">
+                        <div class="branch-label">Selisih = 0</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box normal">
+                            <strong>OPTIMAL</strong><br>
+                            <small>Actual = Ideal</small><br>
+                            <small>No Action</small>
+                        </div>
+                    </div>
+
+                    <div class="branch-item">
+                        <div class="branch-label">Selisih < 0</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box deficit">
+                            <strong>DEFICIT</strong><br>
+                            <small>Actual < Ideal</small><br>
+                            <small>Butuh Tambahan</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow-down">&#8595;</div>
+                <div class="flow-box start-end">OUTPUT: Surplus/Deficit Report</div>
+            </div>
+        </div>
+
+        <!-- Flowchart 3: Surplus Detection & Redistribution -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">3</span>
+                Surplus Detection & Redistribution Algorithm
+            </h2>
+
+            <div class="flowchart">
+                <div class="flow-box start-end">SURPLUS TERDETEKSI</div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box process">
+                    <strong>Identifikasi Artikel</strong><br>
+                    <small>Hitung Turnover Rate setiap artikel</small><br>
+                    <small>di store surplus</small>
+                </div>
+                <div class="sub-section" style="max-width: 400px;">
+                    <h4>Formula Turnover Rate:</h4>
+                    <code>Turnover = Qty Sold ÷ Average Stock</code>
+                    <br><br>
+                    <small>Turnover rendah = prioritas ditarik</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box decision-box">
+                    Prioritaskan artikel dengan<br>
+                    <strong>Turnover Rate RENDAH</strong><br>
+                    <small>(Slow moving di store tersebut)</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box process" style="background: linear-gradient(135deg, #8e44ad, #9b59b6);">
+                    <strong>DESTINATION MATCHING</strong><br>
+                    <small>Cari destinasi yang tepat</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <!-- Priority Flow -->
+                <div style="background: #f8f9fa; padding: 30px; border-radius: 12px; width: 100%; max-width: 900px;">
+                    <h4 style="text-align: center; margin-bottom: 20px; color: #1a5276;">Urutan Prioritas Destinasi</h4>
+
+                    <div class="horizontal-flow">
+                        <div class="flow-box store" style="min-width: 220px;">
+                            <strong>PRIORITAS 1</strong><br>
+                            Transfer ke Store Lain<br>
+                            <small>(Sesama Region)</small>
+                        </div>
+                        <div class="arrow" style="font-size: 1.5em;">&#8594;</div>
+                        <div class="flow-box warehouse" style="min-width: 220px;">
+                            <strong>PRIORITAS 2</strong><br>
+                            Tarik ke Warehouse<br>
+                            <small>(Regional)</small>
+                        </div>
+                        <div class="arrow" style="font-size: 1.5em;">&#8594;</div>
+                        <div class="flow-box warehouse" style="min-width: 220px; background: linear-gradient(135deg, #1a5276, #2980b9);">
+                            <strong>PRIORITAS 3</strong><br>
+                            Transfer Antar WH<br>
+                            <small>(Qty Besar)</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow-down">&#8595;</div>
+
+                <!-- Decision for Priority 1 -->
+                <div class="flow-box decision-box">
+                    Cek Prioritas 1:<br>
+                    <strong>Ada store lain yang DEFICIT</strong><br>
+                    <strong>untuk tier & artikel yang sama?</strong>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="branch">
+                    <div class="branch-item">
+                        <div class="branch-label yes-label">YA</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box decision-box" style="font-size: 0.9em;">
+                            Cek Turnover artikel<br>
+                            di store tujuan<br>
+                            <strong>TINGGI?</strong>
+                        </div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="branch" style="gap: 20px;">
+                            <div class="branch-item">
+                                <div class="branch-label yes-label">YA</div>
+                                <div class="arrow-down">&#8595;</div>
+                                <div class="flow-box store">
+                                    <strong>TRANSFER</strong><br>
+                                    Store to Store
+                                </div>
+                            </div>
+                            <div class="branch-item">
+                                <div class="branch-label no-label">TIDAK</div>
+                                <div class="arrow-down">&#8595;</div>
+                                <div class="flow-box warehouse">
+                                    <strong>TARIK KE WH</strong><br>
+                                    Regional
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="branch-item">
+                        <div class="branch-label no-label">TIDAK</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box decision-box" style="font-size: 0.9em;">
+                            WH Regional<br>
+                            <strong>KAPASITAS CUKUP?</strong>
+                        </div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="branch" style="gap: 20px;">
+                            <div class="branch-item">
+                                <div class="branch-label yes-label">YA</div>
+                                <div class="arrow-down">&#8595;</div>
+                                <div class="flow-box warehouse">
+                                    <strong>TARIK KE WH</strong><br>
+                                    Regional
+                                </div>
+                            </div>
+                            <div class="branch-item">
+                                <div class="branch-label no-label">TIDAK</div>
+                                <div class="arrow-down">&#8595;</div>
+                                <div class="flow-box warehouse" style="background: linear-gradient(135deg, #1a5276, #2980b9);">
+                                    <strong>TRANSFER</strong><br>
+                                    Antar WH
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow-down" style="margin-top: 30px;">&#8595;</div>
+                <div class="flow-box start-end">GENERATE RECOMMENDATION</div>
+            </div>
+        </div>
+
+        <!-- Flowchart 4: Distribution Network & Rules -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">4</span>
+                Distribution Network & Rules
+            </h2>
+
+            <!-- Network Diagram -->
+            <div style="text-align: center; padding: 30px;">
+                <svg viewBox="0 0 800 500" style="max-width: 100%; height: auto;">
+                    <!-- WH Jatim (Center/Main) -->
+                    <rect x="300" y="50" width="200" height="80" rx="10" fill="#1a5276"/>
+                    <text x="400" y="85" text-anchor="middle" fill="white" font-weight="bold" font-size="14">WH JATIM</text>
+                    <text x="400" y="105" text-anchor="middle" fill="white" font-size="11">(Warehouse Utama)</text>
+
+                    <!-- WH Bali -->
+                    <rect x="50" y="200" width="160" height="70" rx="10" fill="#34495e"/>
+                    <text x="130" y="235" text-anchor="middle" fill="white" font-weight="bold" font-size="13">WH BALI</text>
+                    <text x="130" y="255" text-anchor="middle" fill="white" font-size="10">Bali, NTB, NTT</text>
+
+                    <!-- WH Jakarta -->
+                    <rect x="590" y="200" width="160" height="70" rx="10" fill="#34495e"/>
+                    <text x="670" y="235" text-anchor="middle" fill="white" font-weight="bold" font-size="13">WH JAKARTA</text>
+                    <text x="670" y="255" text-anchor="middle" fill="white" font-size="10">Jabar, Sumatra, Batam</text>
+
+                    <!-- Stores -->
+                    <rect x="50" y="350" width="140" height="60" rx="8" fill="#16a085"/>
+                    <text x="120" y="380" text-anchor="middle" fill="white" font-weight="bold" font-size="12">STORE BALI</text>
+                    <text x="120" y="395" text-anchor="middle" fill="white" font-size="10">~15 Store</text>
+
+                    <rect x="280" y="350" width="140" height="60" rx="8" fill="#16a085"/>
+                    <text x="350" y="380" text-anchor="middle" fill="white" font-weight="bold" font-size="12">STORE JATIM</text>
+                    <text x="350" y="395" text-anchor="middle" fill="white" font-size="10">~20 Store</text>
+
+                    <rect x="480" y="350" width="140" height="60" rx="8" fill="#16a085"/>
+                    <text x="550" y="380" text-anchor="middle" fill="white" font-weight="bold" font-size="12">STORE SULAWESI</text>
+                    <text x="550" y="395" text-anchor="middle" fill="white" font-size="10">Branch</text>
+
+                    <rect x="610" y="350" width="140" height="60" rx="8" fill="#16a085"/>
+                    <text x="680" y="380" text-anchor="middle" fill="white" font-weight="bold" font-size="12">STORE JAKARTA</text>
+                    <text x="680" y="395" text-anchor="middle" fill="white" font-size="10">~15 Store</text>
+
+                    <!-- Arrows WH to WH -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#e74c3c"/>
+                        </marker>
+                        <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#3498db"/>
+                        </marker>
+                        <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#27ae60"/>
+                        </marker>
+                    </defs>
+
+                    <!-- WH Jatim to WH Bali -->
+                    <line x1="300" y1="110" x2="210" y2="200" stroke="#e74c3c" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <text x="220" y="145" fill="#e74c3c" font-size="10" font-weight="bold">Full Box</text>
+
+                    <!-- WH Jatim to WH Jakarta -->
+                    <line x1="500" y1="110" x2="590" y2="200" stroke="#e74c3c" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    <text x="560" y="145" fill="#e74c3c" font-size="10" font-weight="bold">Full Box</text>
+
+                    <!-- WH to Store arrows -->
+                    <line x1="130" y1="270" x2="120" y2="350" stroke="#3498db" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+                    <line x1="400" y1="130" x2="350" y2="350" stroke="#3498db" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+                    <line x1="400" y1="130" x2="550" y2="350" stroke="#3498db" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+                    <line x1="670" y1="270" x2="680" y2="350" stroke="#3498db" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+
+                    <!-- Store to Store (within region) -->
+                    <path d="M 190 380 Q 235 430 280 380" stroke="#27ae60" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+                    <path d="M 420 380 Q 450 430 480 380" stroke="#27ae60" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+
+                    <!-- Legend -->
+                    <rect x="50" y="440" width="700" height="50" rx="8" fill="#f8f9fa" stroke="#ddd"/>
+                    <line x1="70" y1="465" x2="100" y2="465" stroke="#e74c3c" stroke-width="3"/>
+                    <text x="110" y="469" font-size="11">WH ke WH (Full Box, Qty Besar)</text>
+
+                    <line x1="280" y1="465" x2="310" y2="465" stroke="#3498db" stroke-width="2"/>
+                    <text x="320" y="469" font-size="11">WH ke Store (Full Box)</text>
+
+                    <line x1="480" y1="465" x2="510" y2="465" stroke="#27ae60" stroke-width="2" stroke-dasharray="5,5"/>
+                    <text x="520" y="469" font-size="11">Store ke Store (Boleh Protol)</text>
+                </svg>
+            </div>
+
+            <!-- Rules Table -->
+            <table class="flow-table">
+                <thead>
+                    <tr>
+                        <th>Tipe Transfer</th>
+                        <th>Rule Quantity</th>
+                        <th>Approval</th>
+                        <th>Catatan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>WH ke Store</strong></td>
+                        <td>Prioritas Full Box</td>
+                        <td>Allocation Planner</td>
+                        <td>Protol dibolehkan jika box tidak tersedia</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Store ke Store</strong></td>
+                        <td>Bebas (Boleh Protol)</td>
+                        <td>Area Supervisor / Auto</td>
+                        <td>Harus dalam 1 region (WH yang sama)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Antar Warehouse</strong></td>
+                        <td>Quantity Besar (Full Box)</td>
+                        <td>Allocation Planner</td>
+                        <td>Efisiensi biaya logistik</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Store ke WH (Retur)</strong></td>
+                        <td>Bebas</td>
+                        <td>Allocation Planner</td>
+                        <td>Bisa dititipkan saat pengiriman WH</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Flowchart 5: End-to-End System Process -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">5</span>
+                End-to-End System Process Flow
+            </h2>
+
+            <div class="flowchart">
+                <!-- Phase 1: Data Input -->
+                <div style="background: #e8f4f8; padding: 20px; border-radius: 12px; margin-bottom: 20px; width: 100%; max-width: 800px;">
+                    <h4 style="color: #1a5276; margin-bottom: 15px;">PHASE 1: DATA INPUT</h4>
+                    <div class="horizontal-flow">
+                        <div class="flow-box" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white;">
+                            Master Data<br>
+                            <small>Kapasitas Store/WH</small>
+                        </div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white;">
+                            Sales Data<br>
+                            <small>12 Bulan Terakhir</small>
+                        </div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white;">
+                            Stock Data<br>
+                            <small>Export Accurate</small>
+                        </div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white;">
+                            Tier Master<br>
+                            <small>Klasifikasi Produk</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow-down">&#8595;</div>
+
+                <!-- Phase 2: Processing -->
+                <div style="background: #fef9e7; padding: 20px; border-radius: 12px; margin-bottom: 20px; width: 100%; max-width: 800px;">
+                    <h4 style="color: #d35400; margin-bottom: 15px;">PHASE 2: PROCESSING ENGINE</h4>
+                    <div class="horizontal-flow">
+                        <div class="flow-box process">
+                            Hitung Traffic Profile<br>
+                            <small>Tier Ratio per Store</small>
+                        </div>
+                        <div class="arrow">&#8594;</div>
+                        <div class="flow-box process">
+                            Hitung Ideal Stock<br>
+                            <small>Per Tier per Store</small>
+                        </div>
+                        <div class="arrow">&#8594;</div>
+                        <div class="flow-box decision-box">
+                            Compare<br>
+                            <small>Actual vs Ideal</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow-down">&#8595;</div>
+
+                <!-- Phase 3: Detection -->
+                <div style="background: #fdedec; padding: 20px; border-radius: 12px; margin-bottom: 20px; width: 100%; max-width: 800px;">
+                    <h4 style="color: #c0392b; margin-bottom: 15px;">PHASE 3: DETECTION & ANALYSIS</h4>
+                    <div class="horizontal-flow">
+                        <div class="flow-box surplus">
+                            Detect Surplus<br>
+                            <small>Actual > Ideal</small>
+                        </div>
+                        <div class="flow-box deficit">
+                            Detect Deficit<br>
+                            <small>Actual < Ideal</small>
+                        </div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white;">
+                            Turnover Analysis<br>
+                            <small>Per Artikel per Store</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow-down">&#8595;</div>
+
+                <!-- Phase 4: Recommendation -->
+                <div style="background: #e8f8f5; padding: 20px; border-radius: 12px; margin-bottom: 20px; width: 100%; max-width: 800px;">
+                    <h4 style="color: #16a085; margin-bottom: 15px;">PHASE 4: RECOMMENDATION ENGINE</h4>
+                    <div class="horizontal-flow">
+                        <div class="flow-box" style="background: linear-gradient(135deg, #16a085, #1abc9c); color: white;">
+                            Destination Matching<br>
+                            <small>Find Best Match</small>
+                        </div>
+                        <div class="arrow">&#8594;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #16a085, #1abc9c); color: white;">
+                            Generate<br>Recommendation<br>
+                            <small>Transfer Suggestion</small>
+                        </div>
+                        <div class="arrow">&#8594;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #16a085, #1abc9c); color: white;">
+                            Priority Scoring<br>
+                            <small>Critical/High/Medium/Low</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow-down">&#8595;</div>
+
+                <!-- Phase 5: Dashboard & Action -->
+                <div style="background: #eaecee; padding: 20px; border-radius: 12px; margin-bottom: 20px; width: 100%; max-width: 800px;">
+                    <h4 style="color: #2c3e50; margin-bottom: 15px;">PHASE 5: DASHBOARD & ACTION</h4>
+                    <div class="horizontal-flow">
+                        <div class="flow-box" style="background: linear-gradient(135deg, #2c3e50, #34495e); color: white;">
+                            Display Dashboard<br>
+                            <small>Monitoring & Alerts</small>
+                        </div>
+                        <div class="arrow">&#8594;</div>
+                        <div class="flow-box decision-box">
+                            Review &<br>Approval<br>
+                            <small>Allocation Planner</small>
+                        </div>
+                        <div class="arrow">&#8594;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
+                            Execute Transfer<br>
+                            <small>Input ke Accurate</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow-down">&#8595;</div>
+
+                <!-- Phase 6: Monitoring -->
+                <div style="background: #f4ecf7; padding: 20px; border-radius: 12px; width: 100%; max-width: 800px;">
+                    <h4 style="color: #8e44ad; margin-bottom: 15px;">PHASE 6: MONITORING & EVALUATION</h4>
+                    <div class="horizontal-flow">
+                        <div class="flow-box" style="background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white;">
+                            Track Execution<br>
+                            <small>Transfer Status</small>
+                        </div>
+                        <div class="arrow">&#8594;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white;">
+                            Measure KPIs<br>
+                            <small>Surplus Reduction</small>
+                        </div>
+                        <div class="arrow">&#8594;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white;">
+                            Generate Reports<br>
+                            <small>Weekly/Monthly</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flowchart 6: T4/T5 Special Handling -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">6</span>
+                T4/T5 Promo Stock Handling
+            </h2>
+
+            <div class="flowchart">
+                <div class="flow-box tier-t4" style="min-width: 250px;">
+                    <strong>T4 (Slow Mover)</strong><br>
+                    + <strong>T5 (Discontinued)</strong><br>
+                    <small>= PROMO STOCK</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box decision-box">
+                    Setiap store WAJIB punya<br>
+                    <strong>kapasitas untuk T4/T5</strong><br>
+                    <small>(Berdasarkan Tier Ratio)</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box process">
+                    Cek T4/T5 Actual vs Ideal<br>
+                    <small>di setiap store</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="branch">
+                    <div class="branch-item">
+                        <div class="branch-label">Surplus T4/T5</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white;">
+                            Redistribusi ke store<br>
+                            yang akan <strong>PROMO</strong><br>
+                            <small>atau tarik ke WH</small>
+                        </div>
+                    </div>
+
+                    <div class="branch-item">
+                        <div class="branch-label">Deficit T4/T5</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
+                            Kirim dari WH atau<br>
+                            store surplus<br>
+                            <small>untuk mendukung promo</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sub-section" style="max-width: 600px; margin-top: 30px;">
+                    <h4>Catatan Penting T4/T5:</h4>
+                    <ul style="padding-left: 20px; margin-top: 10px;">
+                        <li>Meskipun kontribusi kecil, space HARUS disediakan</li>
+                        <li>Digunakan untuk program promo</li>
+                        <li>Monitor aging untuk hindari deadstock</li>
+                        <li>Fokus redistribusi ke store dengan jadwal promo</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flowchart 7: Approval Workflow -->
+        <div class="section">
+            <h2 class="section-title">
+                <span class="section-number">7</span>
+                Recommendation Approval Workflow
+            </h2>
+
+            <div class="flowchart">
+                <div class="flow-box start-end">SISTEM GENERATE REKOMENDASI</div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box" style="background: linear-gradient(135deg, #3498db, #2980b9); color: white;">
+                    Tampil di Dashboard<br>
+                    <small>Recommendation Cards</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box" style="background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white;">
+                    <strong>ALLOCATION PLANNER</strong><br>
+                    Review Rekomendasi<br>
+                    <small>Cek From, To, Qty, Reason</small>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="flow-box decision-box">
+                    <strong>KEPUTUSAN</strong>
+                </div>
+                <div class="arrow-down">&#8595;</div>
+
+                <div class="branch">
+                    <div class="branch-item">
+                        <div class="branch-label yes-label">APPROVE</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
+                            Status: Approved<br>
+                            <small>Notify Warehouse</small>
+                        </div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box warehouse">
+                            <strong>WAREHOUSE</strong><br>
+                            Eksekusi Transfer<br>
+                            <small>Input ke Accurate</small>
+                        </div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box store">
+                            <strong>STORE</strong><br>
+                            Terima Barang<br>
+                            <small>Update Stock</small>
+                        </div>
+                    </div>
+
+                    <div class="branch-item">
+                        <div class="branch-label no-label">REJECT</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #e74c3c, #c0392b); color: white;">
+                            Status: Rejected<br>
+                            <small>Input Alasan</small>
+                        </div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #7f8c8d, #95a5a6); color: white;">
+                            Log untuk<br>
+                            Analisis<br>
+                            <small>Improve Algorithm</small>
+                        </div>
+                    </div>
+
+                    <div class="branch-item">
+                        <div class="branch-label" style="background: #f39c12; color: white;">MODIFY</div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #f39c12, #e67e22); color: white;">
+                            Edit Qty / Destinasi<br>
+                            <small>Manual Adjustment</small>
+                        </div>
+                        <div class="arrow-down">&#8595;</div>
+                        <div class="flow-box" style="background: linear-gradient(135deg, #27ae60, #2ecc71); color: white;">
+                            Submit Modified<br>
+                            <small>Proceed to Execute</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="arrow-down" style="margin-top: 30px;">&#8595;</div>
+                <div class="flow-box start-end">UPDATE STATUS & REPORTING</div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 30px; color: #7f8c8d;">
+            <p><strong>Document Version:</strong> 1.0</p>
+            <p><strong>Created for:</strong> PT Dream Dare Discover - Zuma Indonesia</p>
+            <p><strong>Department:</strong> Operasional - Tim Continuous Improvement</p>
+            <p style="margin-top: 20px;">
+                <small>Untuk print/PDF: Ctrl + P > Save as PDF</small>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
